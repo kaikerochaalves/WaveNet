@@ -10,6 +10,8 @@ import numpy as np
 import math
 from sklearn.metrics import mean_squared_error
 from sklearn.metrics import mean_absolute_error
+from sklearn.metrics import mean_absolute_percentage_error
+from permetrics.regression import RegressionMetric
 import statistics as st
 import matplotlib.pyplot as plt
 
@@ -195,12 +197,22 @@ y_pred = model.predict(X_test)
 # Compute the Root Mean Square Error
 RMSE = math.sqrt(mean_squared_error(y_test, y_pred))
 print("RMSE:", RMSE)
+# Compute the Normalized Root Mean Square Error
+NRMSE = RegressionMetric(y_test, y_pred).normalized_root_mean_square_error()
+print("NRMSE:", NRMSE)
 # Compute the Non-Dimensional Error Index
 NDEI= RMSE/st.stdev(y_test.flatten())
 print("NDEI:", NDEI)
 # Compute the Mean Absolute Error
 MAE = mean_absolute_error(y_test, y_pred)
 print("MAE:", MAE)
+# Compute the Mean Absolute Percentage Error
+MAPE = mean_absolute_percentage_error(y_test, y_pred)
+print("MAPE:", MAPE)
+
+# Results
+WaveNet = f'{Model} & {NRMSE:.5f} & {NDEI:.5f} & {MAPE*100:.2f} & -'
+print(f"\n{WaveNet}")
 
 # Plot the graphic
 plt.figure(figsize=(19.20,10.80))
@@ -216,10 +228,6 @@ plt.show()
 
 # Print the summary of the model
 print(model.summary())
-
-# Results for the paper
-WaveNet = f'{Model} & {RMSE:.5f} & {NDEI:.5f} & {MAE:.5f} & -'
-print(f"\n{WaveNet}")
 
 # Plot the model architeture
 # You must install pydot (`pip install pydot`) and install graphviz (https://graphviz.gitlab.io/download/).
